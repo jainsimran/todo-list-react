@@ -6,8 +6,7 @@ function App() {
   let [todoList, setTodoList] = useState([]);
 
   function addItem() {
-    let tempList = [...todoList];
-    tempList.unshift(listItem);
+    let tempList = [...todoList, { listItem, isDone: false }];
     setTodoList(tempList);
     setListItem('');
   }
@@ -15,6 +14,12 @@ function App() {
   function deleteItem(index) {
     let tempList = [...todoList];
     tempList.splice(index, 1);
+    setTodoList(tempList);
+  }
+
+  function doneItem(index) {
+    let tempList = [...todoList];
+    tempList[index].isDone = !tempList[index].isDone;
     setTodoList(tempList);
   }
 
@@ -27,10 +32,11 @@ function App() {
       <ol>
         {todoList.map((item, index) => {
           return (
-              <div key={index} className='listItem'>
-                <li>{item}</li>
-                <button onClick={() => deleteItem(index)}>Delete</button>
-              </div>
+            <div key={index} className={item.isDone ? "crossItem" : "listItem"}>
+              <li>{item.listItem}</li>
+              <button onClick={() => doneItem(index)}>{item.isDone ? "Undone" : "Done"}</button>
+              <button onClick={() => deleteItem(index)}>Delete</button>
+            </div>
           );
         })}
       </ol>
